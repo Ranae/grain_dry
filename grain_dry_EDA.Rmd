@@ -1,0 +1,36 @@
+---
+title: "Grain Dry"
+author: "Ranae N. Dietzel"
+date: "4/5/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+```
+
+```{r, plots}  
+library(tidyverse)
+
+read_grain<-read_csv("2009_grain-and-moisture-weights.csv")
+
+grain<-read_grain
+
+
+ggplot(grain, aes(x=DW, y=MW))+
+  geom_point()
+
+group_by(grain, ID, Sample)%>%
+  summarise(mean_GDUKG = mean(GDUKG, na.rm=TRUE))%>%
+  ungroup()%>%
+ggplot(aes(x=as.factor(Sample), y=mean_GDUKG))+
+  geom_point()+
+  facet_wrap(~ID)  
+
+group_by(grain, ID, Sample)%>%
+  summarise(mean_DW = mean(DW, na.rm=TRUE))%>%
+  ungroup()%>%
+  ggplot(aes(x=as.factor(Sample), y=mean_DW))+
+  geom_point()+
+  facet_wrap(~ID)
+```
